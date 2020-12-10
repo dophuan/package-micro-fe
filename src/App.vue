@@ -1,28 +1,50 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="banner" id="mainApp" :style="bannerStyles" :class="`banner__${position}`">
+    <slot></slot>
   </div>
 </template>
-
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+const defaultStyles = {
+  left: 0,
+  right: 0,
+};
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  props: {
+    position: {
+      type: String,
+      default: 'top',
+      validator(position) {
+        return ['top', 'bottom'].indexOf(position) > -1;
+      },
+    },
+    styles: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  data() {
+    return {
+      bannerStyles: {
+        ...defaultStyles,
+        ...this.styles,
+      },
+    };
+  },
+};
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="scss" scoped>
+.banner {
+  padding: 12px;
+  background-color: #fcf6cd;
+  color: #f6a623;
+  text-align: left;
+  position: fixed;
+  z-index: 2;
+}
+.banner__top {
+  top: 0;
+}
+.banner__bottom {
+  bottom: 0;
 }
 </style>
